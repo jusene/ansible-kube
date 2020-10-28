@@ -16,7 +16,7 @@
 
 - name: install pkg
   yum:
-    name: bind-utils bzip2 git nfs-utils curl yum-utils device-mapper-persistent-data lvm2 net-tools conntrack-tools wget vim  ntpdate libseccomp libtool-ltdl telnet
+    name: bind-utils,bzip2,git,nfs-utils,curl,yum-utils,device-mapper-persistent-data,lvm2,net-tools,conntrack-tools,wget,vim,ntpdate,libseccomp,libtool-ltdl,telnet
     state: latest
 
 - name: sync clock

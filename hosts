@@ -1,2 +1,2 @@
 [server]
-192.168.66.98 hostname="k8s-test"
+192.168.66.98 hostname='k8s-test'

@@ -1,3 +1,6 @@
+- name: set host name
+  shell: hostnamectl set-hostname {{hostname}}
+
 - name: off firewalld
   service:
     name: firewalld

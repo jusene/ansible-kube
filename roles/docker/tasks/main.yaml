@@ -1,0 +1,30 @@
+- name: install docker
+  shell: export VERSION={{ VERSION }}; curl -fsSL "https://get.docker.com/" | bash -s -- --mirror Aliyun
+
+- name: set docker service
+  lineinfile: 
+    path: /usr/lib/systemd/system/docker.service
+    insertbefore: ^ExecStart=
+    line: ExecStartPost=/sbin/iptables -P FORWARD ACCEPT
+
+- name: reload service
+  shell: systemctl daemon-reload
+
+- name: create docker workspace
+  file:
+    path: /ddhome/local/docker
+    state: directory
+
+- name: copy docker daemon.json
+  copy:
+    src: daemon.json
+    dest: /etc/docker/daemon.json
+  notify:
+    - restart docker 
+
+- name: start docker
+  service: 
+    name: docker
+    state: started
+    enabled: yes
+      

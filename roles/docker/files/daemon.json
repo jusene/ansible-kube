@@ -1,0 +1,9 @@
+ {
+        "data-root": "/ddhome/local/docker",
+        "registry-mirrors": ["http://f1361db2.m.daocloud.io"],
+        "log-opts":     {
+                "max-size":"500m",
+                "max-file":"3"
+         }
+       }
+

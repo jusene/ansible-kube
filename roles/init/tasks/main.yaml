@@ -39,4 +39,5 @@
 - name: load ipvs module
   script: ipvs.sh
 
-
+include 'iptables.yaml'
+include 'kernel.yaml'

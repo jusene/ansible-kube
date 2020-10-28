@@ -1,0 +1,21 @@
+- name: install pkg
+  yum:
+    name: gcc,make,libnftnl-devel,libmnl-devel,autoconf,automake,libtool,bison,flex,libnetfilter_conntrack-devel,libnetfilter_queue-devel,libpcap-devel
+    state: latest
+
+- name: update iptables version
+  get_url:
+    url: https://www.netfilter.org/projects/iptables/files/iptables-1.6.2.tar.bz2
+    dest: /tmp/iptables-1.6.2.tar.bz2
+
+- name: install iptables 
+  shell:
+    cmd: 
+      tar xf /tmp/iptables-1.6.2.tar.bz2
+      cd iptables-1.6.2
+      ./autogen.sh
+      ./configure
+      make -j 4
+      make install
+
+

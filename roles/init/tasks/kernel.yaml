@@ -1,0 +1,13 @@
+- name: update kernel
+  shell:
+    cmd:
+      rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
+      yum install -y https://www.elrepo.org/elrepo-release-7.el7.elrepo.noarch.rpm
+      yum install -y kernel-lt --enablerepo=elrepo-kernel
+      grub2-set-default "CentOS Linux (4.4.234-1.el7.elrepo.x86_64) 7 (Core)"
+  when: ansible_architecture == "x86_64"
+
+- name: reboot server
+  shell: reboot
+  when: ansible_architecture == "x86_64"
+  

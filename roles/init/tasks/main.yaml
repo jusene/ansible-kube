@@ -1,3 +1,6 @@
+- name: set host name
+  shell: hostnamectl set-hostname {{hostname}}
+
 - name: off firewalld
   service:
     name: firewalld
@@ -21,7 +24,7 @@
 
 - name: sync clock
   cron:
-    name: "sycn clock"
+    name: "sync clock"
     minute: "*/5"
     job: "ntpdate ntp1.aliyun.com &> /dev/null"
 

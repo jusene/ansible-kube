@@ -6,6 +6,7 @@
 
 - name: off selinux
   shell: setenforce 0
+  ignore_errors: yes
 
 - name: off selinux config
   lineinfile:

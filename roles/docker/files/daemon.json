@@ -1,9 +1,14 @@
  {
-        "data-root": "/ddhome/local/docker",
-        "registry-mirrors": ["http://f1361db2.m.daocloud.io"],
-        "log-opts":     {
-                "max-size":"500m",
-                "max-file":"3"
-         }
+       "data-root": "/ddhome/local/docker",
+       "registry-mirrors": ["http://f1361db2.m.daocloud.io"],
+       "storage-driver": "overlay2",
+       "storage-opts": [
+              "overlay2.override_kernel_check=true"
+       ],
+       "log-driver": "json-file",
+       "log-opts": {
+              "max-size":"500m",
+              "max-file":"3"
        }
+}
 

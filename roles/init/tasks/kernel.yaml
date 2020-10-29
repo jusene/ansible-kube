@@ -9,5 +9,5 @@
   when: ansible_architecture == "x86_64"
 
 - name: reboot server
-  shell: reboot
+  shell: shutdown -r 1
   when: ansible_architecture == "x86_64"

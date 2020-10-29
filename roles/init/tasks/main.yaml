@@ -40,4 +40,3 @@
   script: ipvs.sh
 
 - include: iptables.yaml
-- include: kernel.yaml

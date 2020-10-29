@@ -1,0 +1,19 @@
+- name: install haproxy
+  yum:
+    name: haproxy
+    state: latest
+  tags: ha
+
+- name: copy template conifg
+  template:
+    src: haproxy.j2
+    dest: /etc/haproxy/haproxy.cfg
+  tags: ha
+
+- name: start haproxy
+  service:
+    name: haproxy
+    state: started
+    enabled: yes
+  tags: ha
+

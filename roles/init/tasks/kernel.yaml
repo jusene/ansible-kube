@@ -7,7 +7,9 @@
       yum install -y kernel-lt --enablerepo=elrepo-kernel;
       grub2-set-default "CentOS Linux (4.4.234-1.el7.elrepo.x86_64) 7 (Core)";
   when: ansible_architecture == "x86_64"
+  tags: kernel
 
 - name: reboot server
   shell: shutdown -r 1
   when: ansible_architecture == "x86_64"
+  tags: kernel

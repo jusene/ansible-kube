@@ -1,46 +1,66 @@
 - name: set host name
   shell: hostnamectl set-hostname {{hostname}}
+  tags: common
 
 - name: off firewalld
   service:
     name: firewalld
     state: stopped
     enabled: no
+  tags: common
 
 - name: off selinux
   shell: setenforce 0
   ignore_errors: yes
+  tags: common
 
 - name: off selinux config
   lineinfile:
     path: /etc/selinux/config
     regex: ^SELINUX=.*
     line: SELINUX=disabled
+  tags: common
+
+- name: off swap
+  shell: swapoff -a
+  tags: common
+
+  - name: off swap config
+    lineinfile:
+      regex: .*swap.*
+      line: ''
+    tags: common
 
 - name: install pkg
   yum:
     name: bind-utils,bzip2,git,nfs-utils,curl,yum-utils,device-mapper-persistent-data,lvm2,net-tools,conntrack-tools,wget,vim,ntpdate,libseccomp,libtool-ltdl,telnet
     state: latest
+  tags: common
 
 - name: sync clock
   cron:
     name: "sync clock"
     minute: "*/5"
     job: "ntpdate ntp1.aliyun.com &> /dev/null"
-    
+  tags: common
+
 - name: load kernel module
   shell: modprobe br_netfilter ip_conntrack
+  tags: common
 
 - name: sync sysctl config
   copy:
     src: k8s.conf
     dest: /etc/sysctl.d/k8s.conf
+  tags: common
     
 - name: use k8s.conf
   shell: sysctl -p /etc/sysctl.d/k8s.conf
+  tags: common
 
 - name: load ipvs module
   script: ipvs.sh
+  tags: common
 
 - include: iptables.yaml
 - include: kernel.yaml

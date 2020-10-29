@@ -25,11 +25,11 @@
   shell: swapoff -a
   tags: common
 
-  - name: off swap config
-    lineinfile:
-      regex: .*swap.*
-      line: ''
-    tags: common
+- name: off swap config
+  lineinfile:
+    regex: .*swap.*
+    line: ''
+  tags: common
 
 - name: install pkg
   yum:

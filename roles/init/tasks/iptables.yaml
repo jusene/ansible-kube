@@ -1,3 +1,4 @@
+# 解决使用kube-proxy网络报错，升级iptables版本
 - name: install pkg
   yum:
     name: gcc,make,libnftnl-devel,libmnl-devel,autoconf,automake,libtool,bison,flex,libnetfilter_conntrack-devel,libnetfilter_queue-devel,libpcap-devel

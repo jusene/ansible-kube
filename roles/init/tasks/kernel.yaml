@@ -1,3 +1,4 @@
+# kubernetes 1.18需要升级内核使用
 - name: update kernel
   shell:
     cmd:
@@ -10,4 +11,3 @@
 - name: reboot server
   shell: reboot
   when: ansible_architecture == "x86_64"
-  

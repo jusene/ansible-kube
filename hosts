@@ -1,12 +1,18 @@
+[server]
+192.168.88.52 hostname='k8s-test'
+
 [etcd]
 192.168.66.98 hostname='k8s-test'
 
 [master]
+1.1.1.1
+2.2.2.2
+3.3.3.3
 
 [master:vars]
 master_vip=
 
 [ha]
-
+192.168.88.52
 
 [worker]

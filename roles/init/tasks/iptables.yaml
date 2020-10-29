@@ -12,11 +12,11 @@
 - name: install iptables 
   shell:
     cmd: 
-      tar xf /tmp/iptables-1.6.2.tar.bz2
-      cd iptables-1.6.2
-      ./autogen.sh
-      ./configure
-      make -j 4
+      tar xf /tmp/iptables-1.6.2.tar.bz2;
+      cd iptables-1.6.2;
+      ./autogen.sh;
+      ./configure;
+      make -j 4;
       make install
 
 

@@ -5,5 +5,4 @@
 - 测试系统centos7.5
 
 
-- binary/files 存放kubernetes自行编译好的二进制文件
 

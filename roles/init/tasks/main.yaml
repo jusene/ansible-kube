@@ -27,6 +27,9 @@
     name: "sync clock"
     minute: "*/5"
     job: "ntpdate ntp1.aliyun.com &> /dev/null"
+    
+- name: load kernel module
+  shell: modprobe br_netfilter ip_conntrack
 
 - name: sync sysctl config
   copy:

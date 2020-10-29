@@ -10,6 +10,6 @@
   tags: kernel
 
 - name: reboot server
-  shell: shutdown -r -h 1
+  shell: shutdown -r 1
   when: ansible_architecture == "x86_64"
   tags: kernel

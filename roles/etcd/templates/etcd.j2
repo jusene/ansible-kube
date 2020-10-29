@@ -1,0 +1,33 @@
+name: etcd{{ etcdID }}
+data-dir: /ddhome/etcd/data
+wal-dir: /ddhome/etcd/wal
+snapshot-count: 5000
+heartbeat-interval: 100
+election-timeout: 1000
+quota-backend-bytes: 0
+max-snapshots: 3
+max-wals: 5
+listen-peer-urls: https://{{ inventory_hostname }}:2380
+listen-client-urls: https://{{ inventory_hostname }}:2379,http://127.0.0.1:2379
+advertise-client-urls: https://{{ inventory_hostname }}:2379
+initial-advertise-peer-urls: https://{{ inventory_hostname }}:2380
+initial-cluster: {% for etcd in groups.etcd %} etcd{{ loop.index }}=https://{{ etcd }}:2380, {% endfor %}
+initial-cluster-token: etcd-cluster
+initial-cluster-state: new
+
+client-transport-security:
+  cert-file: /etc/kubernetes/ssl/server.pem
+  key-file: /etc/kubernetes/ssl/server-key.pem
+  client-cert-auth: false
+  trusted-ca-file: /etc/kubernetes/ssl/ca.pem
+  auto-tls: false
+peer-transport-security:
+  cert-file: /etc/kubernetes/ssl/server.pem
+  key-file: /etc/kubernetes/ssl/server-key.pem
+  client-cert-auth: false
+  trusted-ca-file: /etc/kubernetes/ssl/ca.pem
+  auth-tls: false
+debug: false
+logger: zap
+log-outputs: [stderr]
+force-new-cluster: false

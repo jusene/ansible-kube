@@ -1,0 +1,5 @@
+KUBE_SCHEDULER_OPTS="--logtostderr=true \\
+--v=2 \\
+--master={{ inventory_hostname }}:8080 \\
+--address=0.0.0.0 \\
+--leader-elect"

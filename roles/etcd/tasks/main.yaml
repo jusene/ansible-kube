@@ -1,0 +1,79 @@
+- name: down pkg
+  get_url:
+    url: https://jusene.gitee.io/tools/kubernetes/1.18.2/packages/etcd-v3.4.7-linux-amd64.tar.gz
+    dest: /tmp/etcd-v3.4.7-linux-amd64.tar.gz
+  when: ansible_architecture == "x86_64"
+  tags: etcd
+
+- name: down pkg
+  get_url:
+    url: https://jusene.gitee.io/tools/kubernetes/1.18.2/packages/etcd-v3.4.7-linux-arm64.tar.gz
+    dest: /tmp/etcd-v3.4.7-linux-arm64.tar.gz
+  when: ansible_architecture == "aarch64"
+  tasg: etcd
+
+- name: create config directory
+  file:
+    path: {{ item }}
+    state: directory
+  with-items:
+  - /etc/kubernetes/ssl
+  - /etc/etcd
+  - /ddhome/etcd/data
+  - /ddhome/etcd/wal
+  tags: etcd
+
+- name: prepare cert 
+  copy:
+    src: /tmp/tls/{{item}}
+    dest: /etc/kubernetes/ssl/{{item}}
+  with-items:
+  - ca-key.pem
+  - ca.pem
+  - server-key.pem
+  - server.pem
+  tags: etcd
+
+- name: prepare bindary file
+  shell:
+    cmd:
+      tar xf /tmp/etcd-v3.4.7-linux-amd64.tar.gz;
+      cd etcd-v3.4.7-linux-amd64;
+      mv etcd* /usr/local/bin
+  when: ansible_architecture == "x86_64"
+  tags: etcd
+
+- name: prepare bindary file
+  shell:
+    cmd:
+      tar xf /tmp/etcd-v3.4.7-linux-arm64.tar.gz;
+      cd etcd-v3.4.7-linux-arm64;
+      mv etcd* /usr/local/bin
+  when: ansible_architecture == "aarch64"
+  tags: etcd
+
+- name: copy etcd config
+  template:
+    src: etcd.j2
+    dest: /etc/etcd/etcd.yml
+  notify: restart etcd
+  tags: etcd
+
+- name: copy etcd service
+  file:
+    src: etcd.service
+    dest: /usr/lib/systemd/system/etcd.service
+  tags: etcd
+
+- name: reload service
+  shell: systemctl reload etcd
+  tags: etcd
+
+- name: start etcd
+  service:
+    name: etcd
+    state: started
+    enabled: yes
+  tags: etcd
+
+

@@ -2,7 +2,7 @@
 192.168.88.52 hostname='k8s-test'
 
 [etcd]
-192.168.66.98 hostname='k8s-test'
+192.168.66.98 hostname='k8s-test' etcdID=1
 
 [master]
 1.1.1.1
@@ -11,6 +11,7 @@
 
 [master:vars]
 master_vip=
+BOOTSTRAP_TOKEN='b322bf26276397ad1d1b6c020a187fa1'
 
 [ha]
 192.168.88.52

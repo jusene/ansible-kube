@@ -1,0 +1,23 @@
+- name: config scheduler
+  template: 
+    src: scheduler.j2
+    dest: /etc/kubernetes/kube-scheduler
+  tags: master
+
+- name: copy scheduler service
+  copy:
+    src: kube-scheduler.service
+    dest: /usr/lib/systemd/system/kube-scheduler.service
+  tags: master
+
+- name: reload scheduler service
+  shell: systemctl daemon-reload
+  tags: master
+
+- name: start kub-scheduler
+  service:
+    name: kube-scheduler
+    state: started
+    enabled: yes
+  tags: master
+  

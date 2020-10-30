@@ -1,0 +1,51 @@
+- name: down bindary file
+  get_url:
+    src: https://jusene.gitee.io/tools/kubernetes/1.18.2/packages/amd64/{{ item }}
+    dest: /usr/local/bin/{{ item }}
+    mode: 744
+  when: ansible_architecture == "x86_64"
+  tags: worker
+  with-items:
+  - kube-proxy
+
+- name: down bindary file
+  get_url:
+    src: https://jusene.gitee.io/tools/kubernetes/1.18.2/packages/arm64/{{ item }}
+    dest: /usr/local/bin/{{ item }}
+    mode: 744
+  when: ansible_architecture == "aarch64"
+  tags: worker
+  with-items:
+  - kube-proxy
+
+- name: copy kubeconfig
+  copy:
+    src: /tmp/kubeconfig/{{ item }}
+    dest: /etc/kubernetes/{{ item }}
+  with-items:
+  - kube-proxy.kubeconfig
+  tags: worker
+
+- name: copy kube proxy config
+  copy:
+    src: {{ item }}
+    dest: /etc/kubernetes/{{ item }}
+  with-items:
+  - kube-proxy
+  - kube-proxy-config.yml
+  tags: worker
+
+- name: copy kube-proxy service
+  copy:
+    src: kube-proxy.service
+    dest: /usr/lib/systemd/system/kube-proxy.service
+  tags: worker
+
+- name: reload service
+  shell: systemctl daemon-reload
+
+- name: start kube-proxy
+  service:
+    name: kube-proxy
+    state: started
+    enabled: yes

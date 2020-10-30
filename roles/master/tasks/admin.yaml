@@ -1,0 +1,34 @@
+- name: copy admin certificate
+  copy: 
+    src: /tmp/tls/{{ item }}
+    dest: /tmp/tls/{{ item }}
+  with-items:
+  - admin.pem
+  - admin-key.pem
+  tags: master
+
+- name: kubectl admin config 
+  shell:
+    cmd:
+      kubectl config set-cluster kubernetes --certificate-authority=/etc/kubernetes/ssl/ca.pem --embed-certs=true --server=https://{{MASTER_VIP}}:8443;
+      kubectl config set-credentials admin --client-certificate=/tmp/tls/admin.pem --client-key=/tmp/tls/admin-key.pem --embed-certs=true;
+      kubectl config set-context kubernetes --cluster=kubernetes --user=admin;
+      kubectl config use-context kubernetes;
+  tags: master
+
+- name: copy instructs csr
+  copy:
+    src: tls-instructs-csr.yaml
+    dest: /tmp/tls-instructs-csr.yaml
+  tags: master
+
+- name: apply cmd
+  shell:
+    cmd:
+      kubectl create clusterrolebinding kubelet-bootstrap --clusterrole=system:node-bootstrapper --user=kubelet-bootstrap;
+      kubectl apply -f /tmp/tls-instructs-csr.yaml;
+      kubectl create clusterrolebinding node-client-auto-approve-csr --clusterrole=system:certificates.k8s.io:certificatesigningrequests:nodeclient --user=kubelet-bootstrap;
+      kubectl create clusterrolebinding node-client-auto-renew-crt --clusterrole=system:certificates.k8s.io:certificatesigningrequests:selfnodeclient --group=system:nodes;
+      kubectl create clusterrolebinding node-server-auto-renew-crt --clusterrole=system:certificates.k8s.io:certificatesigningrequests:selfnodeserver --group=system:nodes;
+  
+

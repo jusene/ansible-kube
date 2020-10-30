@@ -1,0 +1,28 @@
+- name: down cni plugin
+  get_url:
+    url: https://jusene.gitee.io/tools/kubernetes/1.18.2/packages/arm64/cni-plugins-linux-arm64-v0.8.7.tgz
+    dest: /opt/cni/bin/cni-plugins-linux-v0.8.7.tgz
+  when: ansible_architecture == "aarch64"
+  tags: flannel
+
+- name: down cni plugin
+  get_url:
+    url: https://jusene.gitee.io/tools/kubernetes/1.18.2/packages/arm64/cni-plugins-linux-amd64-v0.8.7.tgz
+    dest: /opt/cni/bin/cni-plugins-linux-v0.8.7.tgz
+  when: ansible_architecture == "x86_64"
+  tags: flannel
+
+- name: untar cni
+  shell:
+    chdir: /opt/cni/bin
+    cmd:
+      tar xf cni-plugins-linux-v0.8.7.tgz
+  tags: flannel
+
+- name: apply flannel
+  shell: curl -s https://jusene.gitee.io/tools/kubernetes/1.18.2/flannel.yaml | kubectl apply -f -
+  delegate_to: groups.master[0]
+  tags: flannel
+
+  
+  

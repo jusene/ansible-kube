@@ -1,0 +1,22 @@
+- name: config apiserver
+  template:
+    src: apiserber.j2
+    dest: /etc/kubernetes/kube-apiserver
+  tags: master
+
+- name: copy apiserver service
+  copy:
+    src: kube-apiserver.service
+    dest: /usr/lib/systemd/system/kube-apiserver.service
+  tags: master
+
+- name: reload apiserver
+  shell: systemctl daemon-reload
+  tags: master
+
+- name: start kube-apiserver
+  service:
+    name: kube-apiserver
+    state: started
+    enabled: yes
+  tags: master

@@ -8,10 +8,8 @@
   with-items:
   - kube-apiserver
   - kube-controller-manager
-  - kube-proxy
   - kube-scheduler
   - kubectl
-  - kubelet
 
 
 - name: down bindary file
@@ -24,10 +22,8 @@
   with-items:
   - kube-apiserver
   - kube-controller-manager
-  - kube-proxy
   - kube-scheduler
   - kubectl
-  - kubelet
 
 - name: create log directory
   file:
@@ -49,84 +45,20 @@
 
 - name: copy cert file
 - name: prepare cert 
-copy:
-  src: /tmp/tls/{{item}}
-  dest: /etc/kubernetes/ssl/{{item}}
-with-items:
-- ca-key.pem
-- ca.pem
-- server-key.pem
-- server.pem
-- metrics-server-key.pem
-- metrics-server.pem
-tags: master
-
-- name: config apiserver
-  template:
-    src: apiserber.j2
-    dest: /etc/kubernetes/kube-apiserver
-  tags: master
-
-- name: copy apiserver service
   copy:
-    src: kube-apiserver.service
-    dest: /usr/lib/systemd/system/kube-apiserver.service
+    src: /tmp/tls/{{item}}
+    dest: /etc/kubernetes/ssl/{{item}}
+  with-items:
+  - ca-key.pem
+  - ca.pem
+  - server-key.pem
+  - server.pem
+  - metrics-server-key.pem
+  - metrics-server.pem
   tags: master
 
-- name: reload apiserver
-  shell: systemctl daemon-reload
-  tags: master
-
-- name: start kube-apiserver
-  service:
-    name: kube-apiserver
-    state: started
-    enabled: yes
-  tags: master
-
-- name: config controller manager
-  template:
-    src: controller-manager.j2
-    dest: /etc/kubernetes/kube-controller-manager
-  tags: master
-
-- name: copy controller manager service
-  copy:
-    src: kube-controller-manager.service
-    dest: /usr/lib/systemd/system/kube-controller-manager.service
-  tags: master
-
-- name: reload controller manager service
-  shell: systemctl daemon-reload
-  tags: master
-
-- name: start kube-controller-manager
-  service:
-    name: kube-controller-manager
-    state: started
-    enabled: yes
-  tags: master
-
-- name: config scheduler
-  template: 
-    src: scheduler.j2
-    dest: /etc/kubernetes/kube-scheduler
-  tags: master
-
-- name: copy scheduler service
-  copy:
-    src: kube-scheduler.service
-    dest: /usr/lib/systemd/system/kube-scheduler.service
-  tags: master
-
-- name: reload scheduler service
-  shell: systemctl daemon-reload
-  tags: master
-
-- name: start kub-scheduler
-  service:
-    name: kube-scheduler
-    state: started
-    enabled: yes
-  tags: master
-  
+- include apiserver.yaml
+- include controller.yaml
+- include scheduler.yaml
+- include admin.yaml
+- include kubeconfig.yaml

@@ -10,7 +10,7 @@
 3.3.3.3
 
 [master:vars]
-master_vip=
+MASTER_VIP=192.168.66.98
 BOOTSTRAP_TOKEN='b322bf26276397ad1d1b6c020a187fa1'
 
 [ha]

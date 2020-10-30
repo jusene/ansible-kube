@@ -1,0 +1,3 @@
+KUBE_PROXY_OPTS="--logtostderr=true \
+--v=2 \
+--config=/etc/kubernetes/kube-proxy-config.yml"

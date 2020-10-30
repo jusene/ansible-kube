@@ -4,7 +4,7 @@ Documentation=https://github.com/kubernetes/kubernetes
 
 [Service]
 EnvironmentFile=-/etc/kubernetes/kube-scheduler
-ExecStart=/usr/local/bin/kube-scheduler \$KUBE_SCHEDULER_OPTS
+ExecStart=/usr/local/bin/kube-scheduler $KUBE_SCHEDULER_OPTS
 Restart=on-failure
 
 [Install]

@@ -1,0 +1,59 @@
+- name: down bindary file
+  get_url:
+    src: https://jusene.gitee.io/tools/kubernetes/1.18.2/packages/amd64/{{ item }}
+    dest: /usr/local/bin/{{ item }}
+    mode: 744
+  when: ansible_architecture == "x86_64"
+  tags: worker
+  with-items:
+  - kubelet
+
+- name: down bindary file
+  get_url:
+    src: https://jusene.gitee.io/tools/kubernetes/1.18.2/packages/arm64/{{ item }}
+    dest: /usr/local/bin/{{ item }}
+    mode: 744
+  when: ansible_architecture == "aarch64"
+  tags: worker
+  with-items:
+  - kubelet
+
+- name: copy kubeconfig
+  copy:
+    src: /tmp/kubeconfig/{{ item }}
+    dest: /etc/kubernetes/{{ item }}
+  with-items:
+  - bootstrap.kubeconfig
+  tags: worker
+
+- name: copy cert
+  copy:
+    src: /tmp/tls/ca.pem
+    dest: /etc/kubernetes/ssl/ca.pem
+  tags: worker
+
+- name: copy kubelet config
+  copy:
+    src: {{ item }}
+    dest: /etc/kubernetes/{{ item }}
+  with-items:
+  - kubelet
+  - kubelet-config.yml
+  tags: worker
+
+- name: copy kubelet service
+  copy:
+    src: kubelet.service
+    dest: /usr/lib/systemd/system/kubelet.service
+  tags: worker
+
+- name: reload service
+  shell: systemctl daemon-reload
+
+- name: start kubelet
+  service:
+    name: kubelet
+    state: started
+    enabled: yes
+
+

@@ -1,0 +1,4 @@
+- name: apply coredns
+  shell: curl -s https://jusene.gitee.io/tools/kubernetes/1.18.2/coredns.yaml | kubectl apply -f -
+  delegate_to: groups.master[0]
+  tags: coredns

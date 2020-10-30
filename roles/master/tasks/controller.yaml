@@ -1,0 +1,22 @@
+- name: config controller manager
+  template:
+    src: controller-manager.j2
+    dest: /etc/kubernetes/kube-controller-manager
+  tags: master
+
+- name: copy controller manager service
+  copy:
+    src: kube-controller-manager.service
+    dest: /usr/lib/systemd/system/kube-controller-manager.service
+  tags: master
+
+- name: reload controller manager service
+  shell: systemctl daemon-reload
+  tags: master
+
+- name: start kube-controller-manager
+  service:
+    name: kube-controller-manager
+    state: started
+    enabled: yes
+  tags: master

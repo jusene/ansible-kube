@@ -1,28 +1,36 @@
 - name: down bindary file
-  get_url:
-    src: https://jusene.gitee.io/tools/kubernetes/1.18.2/packages/amd64/{{ item }}
-    dest: /usr/local/bin/{{ item }}
-    mode: 744
+  #get_url:
+  #  url: "https://jusene.gitee.io/tools/kubernetes/1.18.2/packages/amd64/{{ item }}"
+  #  dest: "/usr/local/bin/{{ item }}"
+  #  mode: 744
+  shell:
+    cmd:
+      wget https://jusene.gitee.io/tools/kubernetes/1.18.2/packages/amd64/{{ item }} -O /usr/local/bin/{{ item }};
+      chmod +x /usr/local/bin/kube*;
   when: ansible_architecture == "x86_64"
   tags: worker
-  with-items:
+  with_items:
   - kubelet
 
 - name: down bindary file
-  get_url:
-    src: https://jusene.gitee.io/tools/kubernetes/1.18.2/packages/arm64/{{ item }}
-    dest: /usr/local/bin/{{ item }}
-    mode: 744
+  #get_url:
+  #  url: "https://jusene.gitee.io/tools/kubernetes/1.18.2/packages/arm64/{{ item }}"
+  #  dest: "/usr/local/bin/{{ item }}"
+  #  mode: 744
+  shell:
+    cmd:
+      wget https://jusene.gitee.io/tools/kubernetes/1.18.2/packages/arm64/{{ item }} -O /usr/local/bin/{{ item }};
+      chmod +x /usr/local/bin/kube*;
   when: ansible_architecture == "aarch64"
   tags: worker
-  with-items:
+  with_items:
   - kubelet
 
 - name: copy kubeconfig
   copy:
     src: /tmp/kubeconfig/{{ item }}
     dest: /etc/kubernetes/{{ item }}
-  with-items:
+  with_items:
   - bootstrap.kubeconfig
   tags: worker
 
@@ -34,11 +42,16 @@
 
 - name: copy kubelet config
   copy:
-    src: {{ item }}
+    src: "{{ item }}"
     dest: /etc/kubernetes/{{ item }}
-  with-items:
-  - kubelet
+  with_items:
   - kubelet-config.yml
+  tags: worker
+
+- name: copy kubelet template
+  template:
+    src: kubelet.j2
+    dest: /etc/kubernetes/kubelet
   tags: worker
 
 - name: copy kubelet service
@@ -49,11 +62,13 @@
 
 - name: reload service
   shell: systemctl daemon-reload
+  tags: worker
 
 - name: start kubelet
   service:
     name: kubelet
     state: started
     enabled: yes
+  tags: worker
 
 

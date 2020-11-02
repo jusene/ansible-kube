@@ -27,13 +27,13 @@
 
 - name: copy file to work space
   copy:
-    src: {{ item }}
+    src: "{{ item }}"
     dest: /tmp/tls/{{ item }}
-  with-items:
+  with_items:
   - ca-config.json
   - ca-csr.json
   - admin-csr.json
-  - kube-proxy.json
+  - kube-proxy-csr.json
   - metrics-server-csr.json
   tags: cert
 

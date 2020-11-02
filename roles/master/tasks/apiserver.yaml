@@ -1,6 +1,6 @@
 - name: config apiserver
   template:
-    src: apiserber.j2
+    src: apiserver.j2
     dest: /etc/kubernetes/kube-apiserver
   tags: master
 

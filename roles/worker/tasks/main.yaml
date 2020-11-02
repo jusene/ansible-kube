@@ -1,2 +1,2 @@
-- include kubelet.yaml
-- include kube-proxy.yaml
+- include: kubelet.yaml
+- include: kube-proxy.yaml

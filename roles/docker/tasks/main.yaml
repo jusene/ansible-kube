@@ -12,8 +12,11 @@
 
 - name: create docker workspace
   file:
-    path: /ddhome/local/docker
+    path: "{{ item }}"
     state: directory
+  with_items:
+  - /ddhome/local/docker
+  - /etc/docker
 
 - name: copy docker daemon.json
   copy:

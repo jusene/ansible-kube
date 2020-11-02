@@ -1,0 +1,5 @@
+- hosts: localhost
+  vars:
+    MASTER_VIP: 192.168.64.143
+  roles:
+  - cert

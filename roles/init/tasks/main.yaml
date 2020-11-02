@@ -27,6 +27,7 @@
 
 - name: off swap config
   lineinfile:
+    path: /etc/fstab
     regex: .*swap.*
     line: ''
   tags: common
@@ -45,7 +46,10 @@
   tags: common
 
 - name: load kernel module
-  shell: modprobe br_netfilter ip_conntrack
+  shell: 
+    cmd: 
+      modprobe br_netfilter; 
+      modprobe ip_conntrack;
   tags: common
 
 - name: sync sysctl config

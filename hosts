@@ -1,19 +1,22 @@
-[server]
-192.168.88.52 hostname='k8s-test'
-
+MASTER_VIP=192.168.64.143
 [etcd]
-192.168.66.98 hostname='k8s-test' etcdID=1
+192.168.64.140  etcdID=1
+192.168.64.141  etcdID=2
+192.168.64.142  etcdID=3
 
 [master]
-1.1.1.1
-2.2.2.2
-3.3.3.3
+192.168.64.140 hostname='k8s-master1'
+192.168.64.141 hostname='k8s-master2'
+192.168.64.142 hostname='k8s-master3'
 
 [master:vars]
-MASTER_VIP=192.168.66.98
+MASTER_VIP=192.168.64.143
 BOOTSTRAP_TOKEN='b322bf26276397ad1d1b6c020a187fa1'
 
 [ha]
-192.168.88.52
+192.168.64.143 hostname='k8s-ha'
 
 [worker]
+192.168.64.140
+192.168.64.141
+192.168.64.142
